@@ -6,7 +6,8 @@ repo_dir = "BoardLib"
 
 board_name = "kilter"   # change if needed
 db_path = "kilter_board.db"
-username = "<kilter_board_username>"  # input your username
+username = "kiltergpt4900"  # input your username
+password = "COMP4900!"
 
 # Clone repo if missing
 if not os.path.exists(repo_dir):
@@ -22,13 +23,8 @@ subprocess.run(["pip", "install", "."], check=True)
 # Build database
 print("Downloading board database...")
 
-subprocess.run([
-    "boardlib",
-    "database",
-    board_name,
-    db_path,
-    "--username",
-    username
-], check=True)
+cmd = "python -m boardlib database kilter kilter_board.db --username kiltergpt4900"
+
+subprocess.run(cmd, shell=True, check=True)
 
 print("Database created:", os.path.abspath(db_path))

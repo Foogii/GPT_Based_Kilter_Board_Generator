@@ -12,7 +12,6 @@ dataset = pd.read_sql("""
     SELECT
         climbs.uuid,
         climbs.name,
-        climbs.description,
         climb_stats.angle,
         ROUND(climb_stats.display_difficulty) AS display_difficulty,
         difficulty_grades.boulder_name,
@@ -30,29 +29,52 @@ dataset = pd.read_sql("""
 
 placements = pd.read_sql("SELECT id, hole_id FROM placements", conn)
 holes = pd.read_sql("SELECT id, x, y FROM holes", conn)
+roles = pd.read_sql("SELECT id, name FROM placement_roles", conn)
 
 placement_to_hole = dict(zip(placements.id, placements.hole_id))
 hole_to_coord = dict(zip(holes.id, zip(holes.x, holes.y)))
+role_names = dict(zip(roles.id, roles.name))
 
 
 def placements_to_coords(frame_string):
-    import re
+    pairs = re.findall(r"p(\d+)r(\d+)", frame_string)
+    pairs = [(int(p), int(r)) for p, r in pairs]
 
-    placement_ids = [int(x) for x in re.findall(r"p(\d+)", frame_string)]
+    start = []
+    middle = []
+    finish = []
 
-    coords = []
-    for p in placement_ids:
-        hole_id = placement_to_hole.get(p)
-        if hole_id:
-            coord = hole_to_coord.get(hole_id)
-            if coord:
-                coords.append(coord)
+    for placement_id, role_id in pairs:
+        hole_id = placement_to_hole[placement_id]
+        coord = hole_to_coord[hole_id]
+        role = role_names[role_id]
 
-    return coords
+        if coord is None:
+            continue
 
-dataset["coords"] = dataset["frames"].apply(placements_to_coords)
+        if role == "start":
+            start.append([role, coord])
 
-dataset = dataset.drop(columns=["frames"])
+        elif role == "finish":
+            finish.append([role, coord])
+
+        else:
+            middle.append([role, coord])
+
+    return start, middle, finish
+
+dataset[["start", "middle", "finish"]] = dataset["frames"].apply(lambda f: pd.Series(placements_to_coords(f)))
+
+
+#############################
+#      DATASET CLEANUP      #
+#############################
+
+dataset = dataset.drop(columns=["frames", "ascensionist_count", "display_difficulty"])
+
+dataset = dataset.rename(columns={"boulder_name": "v_grade"})
+
+dataset["v_grade"] = dataset["v_grade"].str.extract(r"V(\d+)").astype(int)
 
 #############################
 #       CREATE DATASET      #
