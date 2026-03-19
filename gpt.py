@@ -417,7 +417,7 @@ def train():
 def new_best_route():
     # train()
 
-    device = "cuda"
+    device = "cpu"
     checkpoint = torch.load("best_route_gpt_new.pt", map_location=device)
     stoi = checkpoint["stoi"]
     itos = checkpoint["itos"]

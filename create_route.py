@@ -38,7 +38,7 @@ coords = parse_tokens(new_route)
 #        LOAD DATABASE      #
 #############################
 
-conn = sqlite3.connect("kilter_board.db")
+conn = sqlite3.connect("BoardLib/kilter_board.db")
 
 placements = pd.read_sql("SELECT id, hole_id FROM placements", conn)
 holes = pd.read_sql("SELECT id, x, y FROM holes", conn)

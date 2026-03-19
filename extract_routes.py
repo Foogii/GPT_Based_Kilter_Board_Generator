@@ -6,7 +6,7 @@ import re
 #        EXTRACT DATA       #
 #############################
 
-conn = sqlite3.connect("kilter_board.db")
+conn = sqlite3.connect("BoardLib/kilter_board.db")
 
 dataset = pd.read_sql("""
     SELECT
@@ -21,7 +21,10 @@ dataset = pd.read_sql("""
     FROM climbs
     JOIN climb_stats ON climbs.uuid = climb_stats.climb_uuid
     LEFT JOIN difficulty_grades ON ROUND(climb_stats.display_difficulty) = difficulty_grades.difficulty
-    WHERE climb_stats.ascensionist_count >= 50 AND climbs.layout_id = 1
+    JOIN layouts ON climbs.layout_id = layouts.id
+    JOIN products ON layouts.product_id = products.id
+    JOIN product_sizes ON products.id = product_sizes.product_id
+    WHERE climb_stats.ascensionist_count >= 50 AND climbs.layout_id = 1 AND product_sizes.id = 10
     """, conn)
 
 #############################
