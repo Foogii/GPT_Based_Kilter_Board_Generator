@@ -453,4 +453,4 @@ def new_best_route():
 
 
 if __name__ == "__main__":
-    print(new_best_route())
+    train()
