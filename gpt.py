@@ -344,7 +344,7 @@ def train():
     
     optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
     best_val_loss = float("inf")
-    model_path = "best_route_gpt.pt"
+    model_path = "best_route_gpt_new.pt"
 
     for epoch in range(50):
         model.train()
@@ -417,8 +417,8 @@ def train():
 def new_best_route():
     # train()
 
-    device = "cpu"
-    checkpoint = torch.load("best_route_gpt.pt", map_location=device)
+    device = "cuda"
+    checkpoint = torch.load("best_route_gpt_new.pt", map_location=device)
     stoi = checkpoint["stoi"]
     itos = checkpoint["itos"]
     pad_id = checkpoint["pad_id"]
@@ -453,4 +453,4 @@ def new_best_route():
 
 
 if __name__ == "__main__":
-    new_best_route()
+    print(new_best_route())
