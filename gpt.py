@@ -414,16 +414,16 @@ def train():
     test_loss /= len(test_loader)
     print(f"best model test_loss={test_loss:.4f}")
 
-if __name__ == "__main__":
+def new_best_route():
     # train()
-    
-    device = "cuda"
+
+    device = "cpu"
     checkpoint = torch.load("best_route_gpt.pt", map_location=device)
     stoi = checkpoint["stoi"]
     itos = checkpoint["itos"]
     pad_id = checkpoint["pad_id"]
     config = checkpoint["model_config"]
-    
+
     model = RouteGPT(
         vocab_size=config["vocab_size"],
         block_size=config["block_size"],
@@ -433,10 +433,10 @@ if __name__ == "__main__":
         n_layer=config["n_layer"],
         dropout=config["dropout"]
     ).to(device)
-    
+
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
-    
+
     generated = model.generate(
         angle=40,
         grade=3,
@@ -447,4 +447,10 @@ if __name__ == "__main__":
         top_k=10
     )
 
-    print(generated)
+    return generated
+
+    #print(generated)
+
+
+if __name__ == "__main__":
+    new_best_route()

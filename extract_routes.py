@@ -6,7 +6,7 @@ import re
 #        EXTRACT DATA       #
 #############################
 
-conn = sqlite3.connect("kilter_board.db")
+conn = sqlite3.connect("BoardLib/kilter_board.db")
 
 dataset = pd.read_sql("""
     SELECT
@@ -16,11 +16,12 @@ dataset = pd.read_sql("""
         ROUND(climb_stats.display_difficulty) AS display_difficulty,
         difficulty_grades.boulder_name,
         climb_stats.ascensionist_count,
-        climbs.frames
+        climbs.frames,
+        climbs.layout_id
     FROM climbs
     JOIN climb_stats ON climbs.uuid = climb_stats.climb_uuid
     LEFT JOIN difficulty_grades ON ROUND(climb_stats.display_difficulty) = difficulty_grades.difficulty
-    WHERE climb_stats.ascensionist_count >= 100
+    WHERE climb_stats.ascensionist_count >= 50 AND climbs.layout_id = 1
     """, conn)
 
 #############################
@@ -70,7 +71,7 @@ dataset[["start", "middle", "finish"]] = dataset["frames"].apply(lambda f: pd.Se
 #      DATASET CLEANUP      #
 #############################
 
-dataset = dataset.drop(columns=["frames", "ascensionist_count", "display_difficulty"])
+dataset = dataset.drop(columns=["frames", "ascensionist_count", "display_difficulty", "layout_id"])
 
 dataset = dataset.rename(columns={"boulder_name": "v_grade"})
 
