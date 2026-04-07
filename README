@@ -1,5 +1,10 @@
 
-OPTION A: Downloading through terminal
+Andrew Scarlett - 101205077
+Kyle Lai Thom - 101261813
+Comp 4900
+Final Project
+
+Downloading through terminal
 
 Step 0: Note the following Kilter Board App account information: (Will be necessary moving forward)
     username: kiltergpt4900
@@ -12,3 +17,9 @@ Step 2: Download the database using the following line
 python -m boardlib database kilter kilter_board.db --username <input_kilterboard_username>
 
 Step 3: User will be prompted to enter a password to sync the database, enter your password for the kilter board account above.
+
+Step 4 (Optional): Once downloaded, the user may run extract_routes.py to extract the database into a .csv file. (Used for training)
+
+Step 4.1 (Optional): Run gpt.py to train the model.
+
+Step 5: Run create_route.py to create a route, displaying it on a web browser.
