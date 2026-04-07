@@ -4,15 +4,9 @@ import re
 import gpt
 import webbrowser
 
-#############################
-#     GET ROUTE FROM GPT    #
-#############################
-
 new_route = gpt.new_best_route()
+# print(new_route)
 
-#############################
-#     PARSE GPT OUTPUT      #
-#############################
 
 def parse_tokens(tokens):
     coords = []
@@ -34,12 +28,8 @@ def parse_tokens(tokens):
 
 coords = parse_tokens(new_route)
 
-#############################
-#        LOAD DATABASE      #
-#############################
 
-conn = sqlite3.connect("BoardLib/kilter_board.db")
-
+conn = sqlite3.connect("kilter_board.db")
 placements = pd.read_sql("SELECT id, hole_id FROM placements", conn)
 holes = pd.read_sql("SELECT id, x, y FROM holes WHERE product_id = 1", conn)  # Product_id = 1 specifies to only use Kilter Boards (from the database)
 roles = pd.read_sql("SELECT id, name FROM placement_roles", conn)
@@ -47,9 +37,7 @@ roles = pd.read_sql("SELECT id, name FROM placement_roles", conn)
 roles = roles.drop_duplicates("name").set_index("name")["id"].to_dict()
 
 
-#############################
-#     BUILD CONVERSION      #
-#############################
+# Conversion
 
 placement_to_hole = dict(zip(placements.id, placements.hole_id))
 hole_to_placement = dict(zip(placements.hole_id, placements.id))
@@ -58,11 +46,6 @@ hole_to_coord = dict(zip(holes.id, zip(holes.x, holes.y)))
 coord_to_hole = {v: k for k, v in hole_to_coord.items()}
 
 role_map = {k.upper(): v for k, v in roles.items()}
-
-
-#############################
-#     CONVERT TO FRAME      #
-#############################
 
 def build_frame(coords):
 
