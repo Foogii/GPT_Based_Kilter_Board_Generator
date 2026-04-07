@@ -2,9 +2,7 @@ import sqlite3
 import pandas as pd
 import re
 
-#############################
-#        EXTRACT DATA       #
-#############################
+# Extract Data
 
 conn = sqlite3.connect("kilter_board.db")
 
@@ -27,9 +25,7 @@ dataset = pd.read_sql("""
     WHERE climb_stats.ascensionist_count >= 50 AND climbs.layout_id = 1 AND product_sizes.id = 10
     """, conn)
 
-#############################
-#        CONVERT HOLDS      #
-#############################
+# Convert Holds
 
 placements = pd.read_sql("SELECT id, hole_id FROM placements", conn)
 holes = pd.read_sql("SELECT id, x, y FROM holes", conn)
@@ -70,19 +66,13 @@ def placements_to_coords(frame_string):
 dataset[["start", "middle", "finish"]] = dataset["frames"].apply(lambda f: pd.Series(placements_to_coords(f)))
 
 
-#############################
-#      DATASET CLEANUP      #
-#############################
+# Data Cleanup
 
 dataset = dataset.drop(columns=["frames", "ascensionist_count", "display_difficulty", "layout_id"])
 
 dataset = dataset.rename(columns={"boulder_name": "v_grade"})
 
 dataset["v_grade"] = dataset["v_grade"].str.extract(r"V(\d+)").astype(int)
-
-#############################
-#       CREATE DATASET      #
-#############################
 
 dataset.to_csv("DATA.csv", index=False)
 

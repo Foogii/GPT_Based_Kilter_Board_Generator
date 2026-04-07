@@ -7,27 +7,6 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader, random_split
 
 
-
-# # Token and Positional Embedding 
-# class TokenPositionEmbeddings(nn.Module):
-#     def __init__(self, vocab_size, block_size, n_embd, dropout):
-#         super().__init__()
-#         self.token_emb = nn.Embedding(vocab_size, n_embd)
-#         self.pos_emb = nn.Embedding(block_size, n_embd)
-#         self.dropout = nn.Dropout(dropout)
-    
-#     def forward(self, idx):
-#         B, T = idx.shape
-        
-#         pos = torch.arange(T, device=idx.device).unsqueeze(0)
-        
-#         tok = self.token_emb(idx)
-#         pos = self.pos_emb(pos)
-        
-#         x = tok + pos
-#         x = self.dropout(x)
-#         return x
-    
 #  Masked Self Attention
 class MaskedSelfAttention(nn.Module):
     def __init__(self, n_embd, n_head, block_size, dropout):
@@ -417,7 +396,7 @@ def train():
 def new_best_route():
     # train()
 
-    device = "cpu"
+    device = "cuda"
     checkpoint = torch.load("best_route_gpt_new.pt", map_location=device)
     stoi = checkpoint["stoi"]
     itos = checkpoint["itos"]
