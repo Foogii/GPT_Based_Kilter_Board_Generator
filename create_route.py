@@ -29,7 +29,7 @@ def parse_tokens(tokens):
 coords = parse_tokens(new_route)
 
 
-conn = sqlite3.connect("kilter_board.db")
+conn = sqlite3.connect("BoardLib\kilter_board.db")
 placements = pd.read_sql("SELECT id, hole_id FROM placements", conn)
 holes = pd.read_sql("SELECT id, x, y FROM holes WHERE product_id = 1", conn)  # Product_id = 1 specifies to only use Kilter Boards (from the database)
 roles = pd.read_sql("SELECT id, name FROM placement_roles", conn)
