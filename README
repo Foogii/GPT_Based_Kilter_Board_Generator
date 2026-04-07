@@ -1,16 +1,9 @@
-OPTION A: Running setup_database.py
 
-Edit setup_database.py username to match a kilter board account. An account must be created through the mobile app here:
-https://play.google.com/store/apps/details?id=com.auroraclimbing.kilterboard
+OPTION A: Downloading through terminal
 
-Afterwards, run the setup_database file to download the database. If prompted to enter a password, enter the password for
-your kilterboard account.
-
-
-OPTION B: Downloading through terminal
-
-Step 0: An account must be created through the mobile app here:
-https://play.google.com/store/apps/details?id=com.auroraclimbing.kilterboard
+Step 0: Note the following Kilter Board App account information: (Will be necessary moving forward)
+    username: kiltergpt4900
+    password: COMP4900!
 
 Step 1: Clone the BoardLib github repo by running the following line in the terminal:
 git clone https://github.com/lemeryfertitta/BoardLib.git
@@ -18,9 +11,4 @@ git clone https://github.com/lemeryfertitta/BoardLib.git
 Step 2: Download the database using the following line
 python -m boardlib database kilter kilter_board.db --username <input_kilterboard_username>
 
-Step 3: User will be prompted to enter a password to sync the database, enter your password for you kilter board account.
-
-
-FINAL:
-
-After either Option A or B are complete, run extract_routes.py to extract the data from the database into a .csv file.
+Step 3: User will be prompted to enter a password to sync the database, enter your password for the kilter board account above.
