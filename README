@@ -6,9 +6,7 @@ Final Project
 
 Downloading through terminal
 
-Step 0: Note the following Kilter Board App account information: (Will be necessary moving forward)
-    username: kiltergpt4900
-    password: COMP4900!
+Step 0: Create a Kilter Board Account and keep note of login (will be used for database downloading)
 
 Step 1: Clone the BoardLib github repo by running the following line in the terminal:
 git clone https://github.com/lemeryfertitta/BoardLib.git
